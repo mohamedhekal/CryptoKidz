@@ -57,6 +57,13 @@ class ProgressPage:
         self.main_frame = tk.Frame(self.window, bg=self.colors['background'])
         self.main_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
+        # إضافة رمز كأس في الأعلى
+        self.cup_canvas = tk.Canvas(self.main_frame, width=80, height=80, bg=self.colors['background'], highlightthickness=0)
+        self.cup_canvas.pack(pady=(0, 10))
+        self.cup_canvas.create_rectangle(30, 40, 50, 70, fill='#FFD700', outline='')  # جسم الكأس
+        self.cup_canvas.create_oval(20, 20, 60, 50, fill='#FFD700', outline='')  # فوهة الكأس
+        self.cup_canvas.create_rectangle(35, 70, 45, 80, fill='#B8860B', outline='')  # قاعدة الكأس
+        
         # العنوان
         self.title_label = tk.Label(
             self.main_frame,

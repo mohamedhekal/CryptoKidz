@@ -68,6 +68,12 @@ class CryptoPage:
         self.main_frame = tk.Frame(self.window, bg=self.colors['background'])
         self.main_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
+        # إضافة رمز قفل توضيحي في الأعلى
+        self.lock_canvas = tk.Canvas(self.main_frame, width=80, height=80, bg=self.colors['background'], highlightthickness=0)
+        self.lock_canvas.pack(pady=(0, 10))
+        self.lock_canvas.create_rectangle(20, 40, 60, 70, fill='#FF6B6B', outline='')  # جسم القفل
+        self.lock_canvas.create_arc(20, 10, 60, 50, start=0, extent=180, style=tk.ARC, outline='#4ECDC4', width=5)  # قوس القفل
+        
         # العنوان
         self.title_label = tk.Label(
             self.main_frame,

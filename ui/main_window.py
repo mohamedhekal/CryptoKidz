@@ -11,6 +11,7 @@ from .wallet_page import WalletPage
 from .crypto_page import CryptoPage
 from .quiz_page import QuizPage
 from .progress_page import ProgressPage
+import math
 
 class MainWindow:
     """النافذة الرئيسية للتطبيق"""
@@ -43,13 +44,23 @@ class MainWindow:
         """إعداد النافذة"""
         # تعيين الألوان
         self.root.configure(bg=self.colors['background'])
-        
         # تعيين الخطوط
-        self.title_font = ('Arial', 24, 'bold')
-        self.header_font = ('Arial', 16, 'bold')
-        self.normal_font = ('Arial', 12)
-        self.button_font = ('Arial', 14, 'bold')
-    
+        self.title_font = ('Comic Sans MS', 28, 'bold')
+        self.header_font = ('Comic Sans MS', 18, 'bold')
+        self.normal_font = ('Comic Sans MS', 14)
+        self.button_font = ('Comic Sans MS', 18, 'bold')
+        # خلفية متدرجة
+        self.gradient_canvas = tk.Canvas(self.root, width=1200, height=800, highlightthickness=0)
+        self.gradient_canvas.place(x=0, y=0, relwidth=1, relheight=1)
+        self.draw_gradient(self.gradient_canvas, '#FFD700', '#4ECDC4')
+        self.root.update()
+    def draw_gradient(self, canvas, color1, color2):
+        for i in range(0, 800, 2):
+            r = int(color1[1:3], 16) + (int(color2[1:3], 16) - int(color1[1:3], 16)) * i // 800
+            g = int(color1[3:5], 16) + (int(color2[3:5], 16) - int(color1[3:5], 16)) * i // 800
+            b = int(color1[5:7], 16) + (int(color2[5:7], 16) - int(color1[5:7], 16)) * i // 800
+            color = f'#{r:02x}{g:02x}{b:02x}'
+            canvas.create_line(0, i, 1200, i, fill=color)
     def create_widgets(self):
         """إنشاء عناصر الواجهة"""
         # الإطار الرئيسي
@@ -83,6 +94,18 @@ class MainWindow:
         # أزرار التنقل
         self.create_navigation_buttons()
         
+        # رسم القط Crypto متحرك
+        self.cat_canvas = tk.Canvas(self.main_frame, width=160, height=160, bg=self.colors['background'], highlightthickness=0)
+        self.cat_canvas.pack(pady=(0, 10))
+        self.cat_head = self.cat_canvas.create_oval(30, 30, 130, 130, fill='#FFB6C1', outline='')
+        self.cat_face = self.cat_canvas.create_oval(55, 55, 105, 105, fill='white', outline='')
+        self.cat_eye1 = self.cat_canvas.create_oval(70, 80, 80, 90, fill='black', outline='')
+        self.cat_eye2 = self.cat_canvas.create_oval(95, 80, 105, 90, fill='black', outline='')
+        self.cat_ear1 = self.cat_canvas.create_polygon(40, 30, 60, 10, 70, 40, fill='#FFB6C1', outline='')
+        self.cat_ear2 = self.cat_canvas.create_polygon(120, 30, 100, 10, 90, 40, fill='#FFB6C1', outline='')
+        self.cat_nose = self.cat_canvas.create_oval(87, 97, 93, 103, fill='pink', outline='')
+        self.animate_cat()
+        
         # إطار المعلومات
         self.info_frame = tk.Frame(self.main_frame, bg=self.colors['background'])
         self.info_frame.pack(pady=30)
@@ -100,36 +123,16 @@ class MainWindow:
     def create_navigation_buttons(self):
         """إنشاء أزرار التنقل"""
         buttons_data = [
-            {
-                'text': '💼 إنشاء محفظة',
-                'command': self.open_wallet_page,
-                'color': self.colors['primary'],
-                'description': 'تعلم كيف تنشئ محفظة بيتكوين'
-            },
-            {
-                'text': '🔐 تعلم التشفير',
-                'command': self.open_crypto_page,
-                'color': self.colors['secondary'],
-                'description': 'اكتشف عالم التشفير والرموز السرية'
-            },
-            {
-                'text': '🎯 اختبارات تفاعلية',
-                'command': self.open_quiz_page,
-                'color': self.colors['accent'],
-                'description': 'اختبر معرفتك وحصل على مكافآت'
-            },
-            {
-                'text': '📊 تقدمي',
-                'command': self.open_progress_page,
-                'color': self.colors['success'],
-                'description': 'شاهد تقدمك ومكافآتك'
-            }
+            {'text': '🐱 ابدأ مع كريبتو', 'command': self.open_wallet_page, 'color': '#FFD700', 'description': 'رحلة ممتعة مع القط Crypto'},
+            {'text': '💼 إنشاء محفظة', 'command': self.open_wallet_page, 'color': '#4ECDC4', 'description': 'تعلم كيف تنشئ محفظة بيتكوين'},
+            {'text': '🔐 تعلم التشفير', 'command': self.open_crypto_page, 'color': '#FFB6C1', 'description': 'اكتشف عالم التشفير والرموز السرية'},
+            {'text': '🎯 اختبر نفسك', 'command': self.open_quiz_page, 'color': '#B39DDB', 'description': 'اختبر معرفتك وحصل على مكافآت'},
+            {'text': '🏆 إنجازاتي', 'command': self.open_progress_page, 'color': '#96CEB4', 'description': 'شاهد تقدمك ومكافآتك'}
         ]
         
         for i, button_data in enumerate(buttons_data):
-            # إطار الزر
             button_frame = tk.Frame(self.buttons_frame, bg=self.colors['background'])
-            button_frame.grid(row=i//2, column=i%2, padx=20, pady=10)
+            button_frame.grid(row=i//2, column=i%2, padx=30, pady=15)
             
             # الزر الرئيسي
             button = tk.Button(
@@ -138,23 +141,31 @@ class MainWindow:
                 command=button_data['command'],
                 font=self.button_font,
                 bg=button_data['color'],
-                fg='white',
+                fg='#2C3E50',
+                activebackground='#FFFACD',
                 relief=tk.RAISED,
-                bd=3,
-                padx=30,
-                pady=15,
-                cursor='hand2'
+                bd=8,
+                padx=40,
+                pady=25,
+                cursor='hand2',
+                highlightthickness=4,
+                highlightbackground='#FFFACD',
+                borderwidth=0
             )
             button.pack(pady=(0, 5))
             
-            # وصف الزر
+            # ظل للأزرار
+            button.bind('<Enter>', lambda e, b=button: b.config(bg='#FFFACD'))
+            button.bind('<Leave>', lambda e, b=button, c=button_data['color']: b.config(bg=c))
+            
+            # وصف الزر كتلميح
             desc_label = tk.Label(
                 button_frame,
                 text=button_data['description'],
                 font=self.normal_font,
                 bg=self.colors['background'],
                 fg=self.colors['text'],
-                wraplength=200
+                wraplength=220
             )
             desc_label.pack()
     
@@ -342,3 +353,15 @@ class MainWindow:
     def refresh_progress(self):
         """تحديث معلومات التقدم"""
         self.load_progress() 
+
+    def animate_cat(self):
+        # حركة تذبذب بسيطة لرأس القط
+        t = math.sin(self.root.winfo_pointerx() / 50)
+        self.cat_canvas.move(self.cat_head, 0, t)
+        self.cat_canvas.move(self.cat_face, 0, t)
+        self.cat_canvas.move(self.cat_eye1, 0, t)
+        self.cat_canvas.move(self.cat_eye2, 0, t)
+        self.cat_canvas.move(self.cat_ear1, 0, t)
+        self.cat_canvas.move(self.cat_ear2, 0, t)
+        self.cat_canvas.move(self.cat_nose, 0, t)
+        self.cat_canvas.after(100, self.animate_cat) 

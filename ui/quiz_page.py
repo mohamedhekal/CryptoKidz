@@ -64,6 +64,12 @@ class QuizPage:
         self.main_frame = tk.Frame(self.window, bg=self.colors['background'])
         self.main_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
+        # إضافة رمز نجمة في الأعلى
+        self.star_canvas = tk.Canvas(self.main_frame, width=80, height=80, bg=self.colors['background'], highlightthickness=0)
+        self.star_canvas.pack(pady=(0, 10))
+        points = [40,10, 48,35, 75,35, 53,50, 60,75, 40,60, 20,75, 27,50, 5,35, 32,35]
+        self.star_canvas.create_polygon(points, fill='#FFD700', outline='#FFD700')
+        
         # العنوان
         self.title_label = tk.Label(
             self.main_frame,

@@ -63,6 +63,16 @@ class WalletPage:
         self.main_frame = tk.Frame(self.window, bg=self.colors['background'])
         self.main_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
+        # إضافة صورة أو رسم توضيحي للقط Crypto في الأعلى
+        self.cat_canvas = tk.Canvas(self.main_frame, width=120, height=120, bg=self.colors['background'], highlightthickness=0)
+        self.cat_canvas.pack(pady=(0, 10))
+        self.cat_canvas.create_oval(20, 20, 100, 100, fill='#FFB6C1', outline='')  # رأس القط
+        self.cat_canvas.create_oval(40, 40, 80, 80, fill='white', outline='')  # وجه
+        self.cat_canvas.create_oval(55, 60, 65, 70, fill='black', outline='')  # عين يمنى
+        self.cat_canvas.create_oval(75, 60, 85, 70, fill='black', outline='')  # عين يسرى
+        self.cat_canvas.create_polygon(30, 20, 40, 10, 50, 30, fill='#FFB6C1', outline='')  # أذن يمنى
+        self.cat_canvas.create_polygon(90, 20, 80, 10, 70, 30, fill='#FFB6C1', outline='')  # أذن يسرى
+        
         # العنوان
         self.title_label = tk.Label(
             self.main_frame,
