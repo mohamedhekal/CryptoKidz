@@ -17,7 +17,8 @@ class ProgressManager:
         self.progress_data = self.load_progress()
         
         # التأكد من وجود المجلد
-        os.makedirs(os.path.dirname(data_file), exist_ok=True)
+        if os.path.dirname(data_file):
+            os.makedirs(os.path.dirname(data_file), exist_ok=True)
     
     def load_progress(self) -> Dict:
         """تحميل بيانات التقدم من الملف"""
