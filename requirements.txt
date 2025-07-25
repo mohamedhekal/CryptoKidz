@@ -1,0 +1,9 @@
+pygame==2.5.2
+tkinter-tooltip==2.1.0
+Pillow==10.1.0
+pyttsx3==2.90
+cryptography==41.0.7
+base58==2.1.1
+ecdsa==0.18.0
+mnemonic==0.20
+hdwallet==2.2.1 
